@@ -42,6 +42,11 @@ class NeuralNetwork(val inputs: Array[String], val outputs: Array[String], val h
 		}
 	}
 
+	// register the network as listener for all output neurons
+	for (neuron <- output_layer) {
+		neuron.network = this
+	}
+
 	def set_inputs(inputs: Array[Double]) = {
 		// error if inputs != input_layer.length
 		for (i <- 0 until input_layer.length) {
@@ -51,7 +56,7 @@ class NeuralNetwork(val inputs: Array[String], val outputs: Array[String], val h
 
 	def begin_forward_propagation() = {
 		for (i <- 0 until input_layer.length) {
-			println("Begin forward propagation from neuron " + i + " with id " + input_layer(i).identifier)
+			//println("Begin forward propagation from neuron " + i + " with id " + input_layer(i).identifier)
 			input_layer(i).propagate_forward()
 		}
 	}
@@ -66,6 +71,14 @@ class NeuralNetwork(val inputs: Array[String], val outputs: Array[String], val h
 	def print_output() = {
 		for (i <- 0 until output_layer.length) {
 			println("Output from Neuron #" + i + "(" + output_layer(i).identifier + "): " + output_layer(i).value)
+		}
+	}
+
+	def notify_completed() = {
+		this.completed_outputs += 1
+
+		if (completed_outputs == output_layer.length) {
+			// all outputs have completed
 		}
 	}
 }
